@@ -2,14 +2,22 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pokédex Básica</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pokédex Interactiva</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-<h1>Pokédex</h1>
-<input type="text" id="searchInput" placeholder="Buscar Pokémon..." />
+<h1>Pokédex Interactiva</h1>
+
+<div class="controls">
+  <input type="text" id="searchInput" placeholder="Buscar Pokémon..." />
+  <select id="typeFilter">
+    <option value="">Todos los tipos</option>
+  </select>
+</div>
+
 <div id="pokemonContainer" class="pokemon-container"></div>
+<button id="loadMoreBtn">Cargar más</button>
 
 <script src="js/app.js"></script>
 </body>

@@ -1,3 +1,11 @@
+const team = JSON.parse(localStorage.getItem("team")) || [];
+const teamContainer = document.createElement("div");
+teamContainer.id = "teamContainer";
+document.body.appendChild(teamContainer);
+
+
+
+
 const container = document.getElementById("pokemonContainer");
 const searchInput = document.getElementById("searchInput");
 const typeFilter = document.getElementById("typeFilter");
@@ -44,8 +52,25 @@ function showPokemonCard(pokemon) {
     card.appendChild(badge);
   });
 
+  // Botón capturar
+  const catchBtn = document.createElement("button");
+  catchBtn.textContent = "Capturar";
+  catchBtn.onclick = () => {
+    if (team.find(p => p.id === pokemon.id)) {
+      alert("¡Ya capturaste a este Pokémon!");
+    } else if (team.length >= 6) {
+      alert("¡Tu equipo ya tiene 6 Pokémon!");
+    } else {
+      team.push({ id: pokemon.id, name: pokemon.name });
+      localStorage.setItem("team", JSON.stringify(team));
+      renderTeam();
+    }
+  };
+  card.appendChild(catchBtn);
+
   container.appendChild(card);
 }
+
 
 async function loadPokemonBatch(start, count) {
   for (let i = start; i < start + count; i++) {
@@ -91,3 +116,29 @@ loadMoreBtn.addEventListener("click", async () => {
   await loadPokemonBatch(offset, limit);
   offset += limit;
 })();
+
+function renderTeam() {
+  teamContainer.innerHTML = "<h2>Tu equipo Pokémon</h2>";
+  if (team.length === 0) {
+    teamContainer.innerHTML += "<p>No has capturado ningún Pokémon.</p>";
+    return;
+  }
+
+  const list = document.createElement("ul");
+  team.forEach((pokemon, index) => {
+    const item = document.createElement("li");
+    item.textContent = `#${pokemon.id} ${pokemon.name}`;
+    const removeBtn = document.createElement("button");
+    removeBtn.textContent = "Eliminar";
+    removeBtn.onclick = () => {
+      team.splice(index, 1);
+      localStorage.setItem("team", JSON.stringify(team));
+      renderTeam();
+    };
+    item.appendChild(removeBtn);
+    list.appendChild(item);
+  });
+  teamContainer.appendChild(list);
+}
+
+renderTeam();
